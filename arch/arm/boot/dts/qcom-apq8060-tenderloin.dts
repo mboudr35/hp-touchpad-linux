@@ -27,15 +27,28 @@
 #include "qcom-msm8660.dtsi"
 
 / {
-	model = "Qualcomm APQ8060";
-	compatible = "qcom,msm8660";
+	model = "HP Touchpad";
+	compatible = "qcom,apq8060-tenderloin", "qcom,msm8660";
 
 	aliases {
-		// serial0 = &gsbi12_serial;
+		serial0 = &gsbi12_serial;
+		display0 = &lg_panel;
 	};
 
 	chosen {
-		bootargs = "";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		stdout-path = "display0";
+		ranges;
+		fb0: framebuffer@7f600000 {
+			compatible = "simple-framebuffer";
+			reg = <0x7f600000 (1024 * 768 * 4)>;
+			width = <1024>;
+			height = <768>;
+			stride = <(1024 * 4)>;
+			format = "a8r8g8b8";
+			display = <&lg_panel>;
+		};
 	};
 
 	memory {
@@ -44,6 +57,37 @@
 		ranges;
 
 		reg = <0x40000000 0x40000000>;
+	};
+
+	reserved-memory {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges;
+
+		linux,cma {
+			compatible = "shared-dma-pool";
+			reusable;
+			size = <0x4000000>;
+			alignment = <0x2000>;
+			linux,cma-default;
+		};
+
+		linux,dma {
+			compatible = "shared-dma-pool";
+			reusable;
+			size = <0x4000000>;
+			alignment = <0x2000>;
+			linux,dma-default;
+		};
+
+		ramoops@7ff00000 {
+			compatible = "ramoops";
+			reg = <0x7ff00000 0x100000>;
+			record-size = <0x00020000>;
+			console-size = <0x00020000>;
+			ftrace-size = <0x00020000>;
+		};
+
 	};
 
 	regulators {
@@ -689,7 +733,7 @@
 		};
 	};
 
-	panel {
+	lg_panel: panel {
 		compatible = "lg,xga";
 
 		// reset-gpios = <&tlmm 62 GPIO_ACTIVE_HIGH>;
