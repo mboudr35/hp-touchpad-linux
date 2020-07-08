@@ -42,7 +42,7 @@
 		ranges;
 		fb0: framebuffer@7f600000 {
 			compatible = "simple-framebuffer";
-			reg = <0x7f600000 (1024 * 768 * 4)>;
+			reg = <0x7f600000 (1024 * 768 * 4 * 3)>;
 			width = <1024>;
 			height = <768>;
 			stride = <(1024 * 4)>;
@@ -86,6 +86,9 @@
 			record-size = <0x00020000>;
 			console-size = <0x00020000>;
 			ftrace-size = <0x00020000>;
+			pmsg-size = <0x00020000>;
+			max-reason = <4096>;
+			unbuffered;
 		};
 
 	};
@@ -736,7 +739,7 @@
 	lg_panel: panel {
 		compatible = "lg,xga";
 
-		// reset-gpios = <&tlmm 62 GPIO_ACTIVE_HIGH>;
+		reset-gpios = <&tlmm 62 GPIO_ACTIVE_HIGH>;
 		// shdn??-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
 		// GPIO_BACKLIGHT_EN PM8058_GPIO_PM_TO_SYS(25-1)
 		// VDD_LVDS_3.3: l10
