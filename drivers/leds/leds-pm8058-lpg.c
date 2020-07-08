@@ -164,7 +164,7 @@ static int pm8058_lpg_probe(struct platform_device *pdev)
 {
 	struct pm8058_lpg *lpg;
 	struct device_node *np = pdev->dev.of_node;
-	int ret, i;
+	int ret;
 	struct regmap *map;
 
 	lpg = devm_kzalloc(&pdev->dev, sizeof(*lpg), GFP_KERNEL);
