@@ -125,7 +125,7 @@ static void pm8058_lpg_set(struct led_classdev *cled,
 static enum led_brightness pm8058_lpg_get(struct led_classdev *cled)
 {
 	struct pm8058_lpg *lpg = container_of(cled, struct pm8058_lpg, cdev);
-	int ret = 0;
+	enum led_brightness ret = 0;
 
 	regmap_read(lpg->map, SSBI_REG_ADDR_LPG_CTL(3), &ret);
 
