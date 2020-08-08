@@ -38,10 +38,11 @@
 	chosen {
 		#address-cells = <1>;
 		#size-cells = <1>;
-		stdout-path = "display0";
+		stdout-path = "serial0";
 		ranges;
 		fb0: framebuffer@7f600000 {
 			compatible = "simple-framebuffer";
+			status = "okay";
 			reg = <0x7f600000 (1024 * 768 * 4 * 3)>;
 			width = <1024>;
 			height = <768>;
