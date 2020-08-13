@@ -40,9 +40,9 @@
 		#size-cells = <1>;
 		stdout-path = "serial0";
 		ranges;
+		/*
 		fb0: framebuffer@7f600000 {
 			compatible = "simple-framebuffer";
-			status = "okay";
 			reg = <0x7f600000 (1024 * 768 * 4 * 3)>;
 			width = <1024>;
 			height = <768>;
@@ -50,6 +50,7 @@
 			format = "a8r8g8b8";
 			display = <&lg_panel>;
 		};
+		*/
 	};
 
 	memory {
@@ -65,22 +66,6 @@
 		#size-cells = <1>;
 		ranges;
 
-		linux,cma {
-			compatible = "shared-dma-pool";
-			reusable;
-			size = <0x4000000>;
-			alignment = <0x2000>;
-			linux,cma-default;
-		};
-
-		linux,dma {
-			compatible = "shared-dma-pool";
-			reusable;
-			size = <0x4000000>;
-			alignment = <0x2000>;
-			linux,dma-default;
-		};
-
 		ramoops@7ff00000 {
 			compatible = "ramoops";
 			reg = <0x7ff00000 0x100000>;
@@ -89,9 +74,13 @@
 			ftrace-size = <0x00020000>;
 			pmsg-size = <0x00020000>;
 			max-reason = <4096>;
-			unbuffered;
 		};
 
+		/* 16MiB for scanouts, drm/msm doesn't use the base address */
+		scanout_mem: scanout_mem@0 {
+			reg = <0x0 0x8000000>;
+			no-map;
+		};
 	};
 
 	regulators {
@@ -714,12 +703,6 @@
 					v1p8-supply = <&pm8058_l7>;
 				};
 			};
-		};
-
-		/* 16MiB for scanouts, drm/msm doesn't use the base address */
-		scanout_mem: scanout_mem@0 {
-			reg = <0x0 0x8000000>;
-			no-map;
 		};
 
 		mdp@5100000 {
