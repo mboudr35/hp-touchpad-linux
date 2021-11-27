@@ -119,14 +119,24 @@ static void pm8058_lpg_set(struct led_classdev *cled,
 {
 	struct pm8058_lpg *lpg = container_of(cled, struct pm8058_lpg, cdev);
 
-	regmap_write(lpg->map, SSBI_REG_ADDR_LPG_CTL(3), value);
+	int ret = regmap_write(lpg->map, SSBI_REG_ADDR_LPG_CTL(3), value);
+	if (ret < 0) {
+		pr_err("Failed to set LPG brightness: %d\n", ret);
+	}
 }
 
 static enum led_brightness pm8058_lpg_get(struct led_classdev *cled)
 {
 	struct pm8058_lpg *lpg = container_of(cled, struct pm8058_lpg, cdev);
+	enum led_brightness val = 0;
 
-	return 0;
+	int ret = regmap_read(lpg->map, SSBI_REG_ADDR_LPG_CTL(3), &val);
+	if (ret < 0) {
+		pr_err("Failed to get LPG brightness: %d\n", ret);
+		return LED_OFF;
+	}
+
+	return val;
 }
 
 #if 0
