@@ -27,15 +27,29 @@
 #include "qcom-msm8660.dtsi"
 
 / {
-	model = "Qualcomm APQ8060";
-	compatible = "qcom,msm8660";
+	model = "HP Touchpad";
+	compatible = "qcom,apq8060-tenderloin", "qcom,msm8660"
 
 	aliases {
-		// serial0 = &gsbi12_serial;
+		serial0 = &gsbi12_serial;
+		display0 = &lg_panel;
 	};
 
 	chosen {
-		bootargs = "";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		stdout-path = "serial0";
+		ranges;
+		fb0: framebuffer@7f600000 {
+			compatible = "simple-framebuffer";
+			status = "okay";
+			reg = <0x7f600000 (1024 * 768 * 4 * 3)>;
+			width = <1024>;
+			height = <768>;
+			stride = <(1024 * 4)>;
+			format = "a8r8g8b8";
+			display = <&lg_panel>;
+		};
 	};
 
 	memory {
@@ -689,7 +703,7 @@
 		};
 	};
 
-	panel {
+	lg_panel: panel {
 		compatible = "lg,xga";
 
 		// reset-gpios = <&tlmm 62 GPIO_ACTIVE_HIGH>;
